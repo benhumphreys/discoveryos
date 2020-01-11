@@ -1,0 +1,10 @@
+# Build artifacts
+*.o
+*.bin
+*.img
+
+# Bochs emulator
+bochs.log
+
+# Other
+*.gdb
