@@ -1,15 +1,27 @@
 AS := as
+CC := gcc
 LD := ld
 
-all:	floppy.img
+all: discoveryos.bin
 
-floppy.img:	stage1.bin
-		dd if=/dev/zero of=$@ bs=512 count=2880
-		dd if=$< of=$@ conv=notrunc seek=0
+discoveryos.bin: kernel.o boot.o
+	ld -m elf_i386 -T linker.ld kernel.o boot.o -o discoveryos.bin -nostdlib
+	grub-file --is-x86-multiboot discoveryos.bin
 
-stage1.bin:	stage1.s
-		$(AS) --32 -o stage1.o $<
-		$(LD) -m elf_i386 -Ttext 0x0 --oformat binary --entry=0x0 -o $@ stage1.o
+kernel.o: kernel.c
+	$(CC) -m32 -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
+boot.o: boot.s
+	$(AS) --32 boot.s -o boot.o
+
+.PHONY: clean
 clean:
-		rm -f *.o *.bin floppy.img
+	rm -f *.o *.bin
+
+.PHONY: run
+run: discoveryos.bin
+	scripts/discoveryos-run.sh
+
+.PHONY: debug
+debug: discoveryos.bin
+	scripts/discoveryos-debug.sh
