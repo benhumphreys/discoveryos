@@ -1,7 +1,8 @@
 # Build artifacts
 *.o
-*.bin
 *.img
+*.bin
+discoveryos-kernel
 
 # Bochs emulator
 bochs.log

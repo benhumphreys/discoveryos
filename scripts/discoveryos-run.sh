@@ -1,1 +1,1 @@
-qemu-system-i386 -kernel discoveryos.bin
+qemu-system-i386 -kernel discoveryos-kernel

@@ -2,26 +2,31 @@ AS := as
 CC := gcc
 LD := ld
 
-all: discoveryos.bin
+CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+OBJS = boot.o console.o kernel.o
 
-discoveryos.bin: kernel.o boot.o
-	ld -m elf_i386 -T linker.ld kernel.o boot.o -o discoveryos.bin -nostdlib
-	grub-file --is-x86-multiboot discoveryos.bin
+KERNEL = discoveryos-kernel
 
-kernel.o: kernel.c
-	$(CC) -m32 -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+all: $(KERNEL)
+
+$(KERNEL): $(OBJS)
+	ld -m elf_i386 -T linker.ld $(OBJS) -o $(KERNEL) -nostdlib
+	grub-file --is-x86-multiboot $(KERNEL)
+
+%.o: %.c %.h
+	$(CC) -m32 -c -o $@ $< $(CFLAGS)
 
 boot.o: boot.s
 	$(AS) --32 boot.s -o boot.o
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin
+	rm -f *.o $(KERNEL)
 
 .PHONY: run
-run: discoveryos.bin
+run: $(KERNEL)
 	scripts/discoveryos-run.sh
 
 .PHONY: debug
-debug: discoveryos.bin
+debug: $(KERNEL)
 	scripts/discoveryos-debug.sh
