@@ -3,7 +3,7 @@ CC := gcc
 LD := ld
 
 CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-OBJS = boot.o console.o kernel.o
+OBJS = boot.o string.o console.o kernel.o
 
 KERNEL = discoveryos-kernel
 

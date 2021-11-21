@@ -26,6 +26,6 @@ void console_init(void);
  
 void console_setcolor(uint8_t color);
  
-void console_printf(const char* data);
+void console_printf(const char *format, ...);
 
 #endif

@@ -25,6 +25,11 @@
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
+.long 0x0   # header_addr
+.long 0x0   # load_addr
+.long 0x0   # load_end_addr
+.long 0x0   # bss_end_addr
+.long 0x0   # entry_addr
 
 # Setup stack (grows downwards)
 .section .bss
