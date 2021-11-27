@@ -46,9 +46,6 @@ static void console_putcharat(char c, uint8_t color, size_t x, size_t y) {
 }
  
 static void console_putchar(char c) {
-    if (c == '\0') {
-        return;
-    }
     if (c == '\n') {
         console_column = 0;
         console_row++;
@@ -65,23 +62,30 @@ static void console_putchar(char c) {
 }
 
 static void console_write(const char *data, size_t size) {
-	for (size_t i = 0; i < size; i++) {
+	for (size_t i = 0; i < size && data[i] != '\0'; i++) {
 		console_putchar(data[i]);
     }
 }
 
-static void console_putuint32(uint32_t n) {
-    char buf[11];
-    memset(buf, 0, 11);
+static void console_putuint32(uint32_t n, uint32_t base) {
+    if (base < 2) {
+        return;
+    }
+
+    const int MAX_DIGITS = 32;
+    char buf[MAX_DIGITS];
+    memset(buf, 0, MAX_DIGITS);
 
     int i = 0;
     // Generate digits in reverse order
     do {
-        buf[i++] = n % 10 + '0';
-    } while ((n /= 10) > 0);
+        uint32_t digit = n % base;
+        char ascii_offset = (base > 10 && digit > 10) ? 'A' : '0';
+        buf[i++] = digit + ascii_offset;
+    } while ((n /= base) > 0);
 
     reverse(buf);
-    console_write(buf, 11);
+    console_write(buf, MAX_DIGITS);
 }
 
 void console_printf(const char *format, ...) {
@@ -95,8 +99,10 @@ void console_printf(const char *format, ...) {
             i++;
             switch (format[i]) {
                 case 'd':
-                    uint32_t val = va_arg(argp, uint32_t);
-                    console_putuint32(val);
+                    console_putuint32(va_arg(argp, uint32_t), 10);
+                    break;
+                case 'x':
+                    console_putuint32(va_arg(argp, uint32_t), 16);
                     break;
                 default:
                     console_putchar(format[i + 1]);
