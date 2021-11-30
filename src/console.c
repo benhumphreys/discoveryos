@@ -1,11 +1,16 @@
 #include "console.h"
 
 #include "types.h"
+#include "io.h"
 #include "stdarg.h"
 #include "string.h"
 
-/* The VGA video memory address. */
+/* The VGA video memory address */
 #define VIDEO_MEM 0xB8000
+
+/* CRT controller ports */
+#define CRTC_ADDR_PORT 0x3D4
+#define CRTC_DATA_PORT 0x3D5
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -108,6 +113,15 @@ static void console_putuint32(uint32_t n, uint32_t base) {
     console_write(buf, MAX_DIGITS);
 }
 
+static void update_cursor(void) {
+    uint16_t pos = console_row * VGA_WIDTH + console_column;
+
+    outb(CRTC_ADDR_PORT, 0x0F); // Cursor location low register
+    outb(CRTC_DATA_PORT, (uint8_t) (pos & 0xFF));
+    outb(CRTC_ADDR_PORT, 0x0E); // Cursor location high register
+    outb(CRTC_DATA_PORT, (uint8_t) ((pos >> 8) & 0xFF));
+}
+
 void console_printf(const char *format, ...) {
     va_list argp;
     va_start(argp, format);
@@ -131,4 +145,5 @@ void console_printf(const char *format, ...) {
     }
 
     va_end(argp);
+    update_cursor();
 }

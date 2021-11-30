@@ -28,3 +28,5 @@ Then press 'c' to continue execution, as QEMU/GDB will started in a paused state
 
 * [Multiboot specification](https://www.gnu.org/software/grub/manual/multiboot/multiboot.html)
 * [GNU Linker documentation](https://sourceware.org/binutils/docs-2.33.1/ld/index.html)
+* [GNU Compiler inline assembly](https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html)
+  * [Machine specific constraints](https://gcc.gnu.org/onlinedocs/gcc/Machine-Constraints.html#Machine-Constraints)
