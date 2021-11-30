@@ -1,5 +1,28 @@
 #include "string.h"
 
+
+void *memmove(void *dest, const void *src, size_t n) {
+    if (src == dest) {
+        return dest;
+    }
+
+    unsigned char *d = dest;
+    unsigned char *s = s;
+    if (d < s) {
+        while (n--) {
+            *d++ = *s++;
+        }
+    } else {
+        while (n--) {
+            s += n;
+            d += n;
+            *d-- = *s--;
+        }
+    }
+
+    return dest;
+}
+
 void *memset(void *s, int c, size_t n) {
     unsigned char *ptr = s;
     while (n--) {
