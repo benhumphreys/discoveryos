@@ -1,7 +1,9 @@
 #include "console.h"
 #include "cpuid.h"
+#include "gdt.h"
 
 void kernel_main(void) {
+    gdt_init();
 	console_init();
 
     console_setcolor(VGA_COLOR_LIGHT_BLUE);
