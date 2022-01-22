@@ -15,11 +15,11 @@ struct gdt_descriptor {
     uint32_t base;
 } __attribute__((packed));
 
-struct gdt_entry gdt[3] __attribute__ ((aligned(0x1000)));
-struct gdt_descriptor gdt_p;
+static struct gdt_entry gdt[3] __attribute__ ((aligned(0x1000)));
+static struct gdt_descriptor gdt_p;
 extern void load_gdt(struct gdt_descriptor *gdt_p);
 
-void set_gdt_entry(uint32_t idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity) {
+static void set_gdt_entry(uint32_t idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity) {
     gdt[idx].base_low = (base & 0xffff);
     gdt[idx].base_middle = (base >> 16) & 0xff;
     gdt[idx].base_high = (base >> 24) & 0xff;
