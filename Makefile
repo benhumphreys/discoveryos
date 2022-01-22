@@ -2,7 +2,9 @@ AS := as
 CC := gcc
 LD := ld
 
-CFLAGS = -m32 -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+# -mgeneral-regs-only -mno-red-zone are for interrupt handlers and perhaps
+# those flags should be set specifically for that compilation unit only
+CFLAGS = -m32 -std=gnu99 -ffreestanding -O2 -Wall -Wextra -mgeneral-regs-only -mno-red-zone
 
 SRC_DIR = src
 BUILD_DIR = build

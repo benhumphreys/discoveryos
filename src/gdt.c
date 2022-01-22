@@ -38,7 +38,7 @@ void gdt_init(void) {
     // Kernel code (offset: 0x8)
     set_gdt_entry(1, 0, 0xffffffff, 0x9a, 0xcf);
 
-    // Kernel data (offset:010)
+    // Kernel data (offset: 0x10)
     set_gdt_entry(2, 0, 0xffffffff, 0x92, 0xcf);
 
     // Load GDT register
