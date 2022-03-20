@@ -13,5 +13,5 @@ void kernel_main(void) {
     struct cpuid cpuid = get_cpuid();
     console_printf("CPU - Stepping: 0x%x Model: 0x%x Family: 0x%x\n",
             cpuid.stepping, cpuid.model, cpuid.family);
-    asm("int $0x0e"); // Software interrupt
+    asm("int $0xe"); // Software interrupt (Page Fault)
 }

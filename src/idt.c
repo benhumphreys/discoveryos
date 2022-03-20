@@ -41,10 +41,38 @@ void idt_init(void) {
     idtr.base = (uintptr_t)&idt[0];
     idtr.limit = (uint16_t)sizeof(struct idt_entry) * IDT_NUM_DESCRIPTORS - 1;
 
-    // Setup exception ISRs (0-31) - See: https://wiki.osdev.org/Exceptions
-    for (uint8_t vector = 0; vector < 32; vector++) {
-        idt_set_descriptor(vector, &default_exception_handler, IDT_TRAP_GATE);
-    }
+    idt_set_descriptor(0, &exception_handler_isr0, IDT_TRAP_GATE);
+    idt_set_descriptor(1, &exception_handler_isr1, IDT_TRAP_GATE);
+    idt_set_descriptor(2, &exception_handler_isr2, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(3, &exception_handler_isr3, IDT_TRAP_GATE);
+    idt_set_descriptor(4, &exception_handler_isr4, IDT_TRAP_GATE);
+    idt_set_descriptor(5, &exception_handler_isr5, IDT_TRAP_GATE);
+    idt_set_descriptor(6, &exception_handler_isr6, IDT_TRAP_GATE);
+    idt_set_descriptor(7, &exception_handler_isr7, IDT_TRAP_GATE);
+    idt_set_descriptor(8, &exception_handler_isr8, IDT_TRAP_GATE);
+    idt_set_descriptor(9, &exception_handler_isr9, IDT_TRAP_GATE);
+    idt_set_descriptor(10, &exception_handler_isr10, IDT_TRAP_GATE);
+    idt_set_descriptor(11, &exception_handler_isr11, IDT_TRAP_GATE);
+    idt_set_descriptor(12, &exception_handler_isr12, IDT_TRAP_GATE);
+    idt_set_descriptor(13, &exception_handler_isr13, IDT_TRAP_GATE);
+    idt_set_descriptor(14, &exception_handler_isr14, IDT_TRAP_GATE);
+    idt_set_descriptor(15, &exception_handler_isr15, IDT_TRAP_GATE);
+    idt_set_descriptor(16, &exception_handler_isr16, IDT_TRAP_GATE);
+    idt_set_descriptor(17, &exception_handler_isr17, IDT_TRAP_GATE);
+    idt_set_descriptor(18, &exception_handler_isr18, IDT_TRAP_GATE);
+    idt_set_descriptor(19, &exception_handler_isr19, IDT_TRAP_GATE);
+    idt_set_descriptor(20, &exception_handler_isr20, IDT_TRAP_GATE);
+    idt_set_descriptor(21, &exception_handler_isr21, IDT_TRAP_GATE);
+    idt_set_descriptor(22, &exception_handler_isr22, IDT_TRAP_GATE);
+    idt_set_descriptor(23, &exception_handler_isr23, IDT_TRAP_GATE);
+    idt_set_descriptor(24, &exception_handler_isr24, IDT_TRAP_GATE);
+    idt_set_descriptor(25, &exception_handler_isr25, IDT_TRAP_GATE);
+    idt_set_descriptor(26, &exception_handler_isr26, IDT_TRAP_GATE);
+    idt_set_descriptor(27, &exception_handler_isr27, IDT_TRAP_GATE);
+    idt_set_descriptor(28, &exception_handler_isr28, IDT_TRAP_GATE);
+    idt_set_descriptor(29, &exception_handler_isr29, IDT_TRAP_GATE);
+    idt_set_descriptor(30, &exception_handler_isr30, IDT_TRAP_GATE);
+    idt_set_descriptor(31, &exception_handler_isr31, IDT_TRAP_GATE);
 
     __asm__ __volatile__ ("lidt %0" : : "m"(idtr));
     __asm__ __volatile__ ("sti"); // Set interrupt flag (enable non-maskable interrupts)
