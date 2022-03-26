@@ -7,15 +7,32 @@
 static void print_multibootinfo(struct multiboot_info *info) {
     console_printf("Multiboot Info:\n");
     if (info->flags & MULTIBOOT_INFO_FLAG_MEMORY) {
-        console_printf("  Mem lower: %d KB\n", info->mem_lower);
-        console_printf("  Mem upper: %d KB\n", info->mem_upper);
+        console_printf("Mem lower: %d KB\n", info->mem_lower);
+        console_printf("Mem upper: %d KB\n", info->mem_upper);
     }
     if (info->flags & MULTIBOOT_INFO_FLAG_BOOTDEV) {
-        console_printf("  Boot device - Disk: %x, Part1: %x, Part2: %x, Part3: %x\n",
+        console_printf("Boot device - Disk: %x, Part1: %x, Part2: %x, Part3: %x\n",
                 (info->boot_device >> 24) & 0xFF,
                 (info->boot_device >> 16) & 0xFF,
                 (info->boot_device >> 8) & 0xFF,
                 info->boot_device & 0xFF);
+    }
+    if (info->flags & MULTIBOOT_INFO_MEM_MAP) {
+
+      console_printf("mmap_addr = 0x%x, mmap_length = 0x%x\n",
+              (uint32_t) info->mmap_addr, (uint32_t) info->mmap_length);
+
+      for (struct multiboot_mmap_entry *mmap = (struct multiboot_mmap_entry *) info->mmap_addr;
+              (uint32_t) mmap < info->mmap_addr + info->mmap_length;
+              mmap = (struct multiboot_mmap_entry *) ((uint32_t) mmap + mmap->size + sizeof (mmap->size))) {
+          console_printf("  base_addr = 0x%x %x, length = 0x%x %x, type = 0x%x\n",
+                  (uint32_t) (mmap->addr >> 32),
+                  (uint32_t) (mmap->addr & 0xffffffff),
+                  (uint32_t) (mmap->len >> 32),
+                  (uint32_t) (mmap->len & 0xffffffff),
+                  (uint32_t) mmap->type);
+      }
+
     }
 }
 
