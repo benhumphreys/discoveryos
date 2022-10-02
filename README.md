@@ -24,6 +24,11 @@ make debug
 ```
 Then press 'c' to continue execution, as QEMU/GDB will started in a paused state.
 
+## Notes
+
+- Kernel image is loaded at 0x100000 (1M) and address range 1-4M
+is reserved for the kernel
+
 ## References
 
 * [Multiboot specification](https://www.gnu.org/software/grub/manual/multiboot/multiboot.html)

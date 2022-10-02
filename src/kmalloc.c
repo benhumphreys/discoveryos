@@ -33,7 +33,7 @@ void kmalloc_init(void *ptr, size_t size) {
     if (size < METADATA_SIZE) {
         return;
     }
-    console_printf("Malloc initialized with block of %d bytes\n", size);
+    console_printf("mm: initialized with block 0x%p, length %d bytes\n", ptr, size);
     struct block_metadata *block = ptr;
     block->size = size - METADATA_SIZE;
     block->next = NULL;

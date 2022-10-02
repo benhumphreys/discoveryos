@@ -48,6 +48,11 @@ static void init_mm(struct multiboot_info *info) {
         uint32_t addr = mmap->addr & 0xffffffff;
         uint32_t len = mmap->len & 0xffffffff;
         if (addr >= 0x100000 && mmap->type == MULTIBOOT_MEMORY_AVAILABLE) {
+            // Kernel is loaded at 0x100000 (i.e. 1M) so reserve from 1M to 4M for it
+            if (addr < 0x400000) {
+                addr = 0x400000;
+                len -= 0x400000 - addr;
+            }
             kmalloc_init((void *) addr, len);
         }
     }
