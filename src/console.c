@@ -138,6 +138,9 @@ void console_printf(const char *format, ...) {
                 case 'x':
                     console_putuint32(va_arg(argp, uint32_t), 16);
                     break;
+                case 'p':
+                    console_putuint32(va_arg(argp, uint32_t), 16);
+                    break;
                 default:
                     console_putchar(format[i + 1]);
             }
