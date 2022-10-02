@@ -3,6 +3,7 @@
 #include "multiboot.h"
 #include "gdt.h"
 #include "idt.h"
+#include "kmalloc.h"
 
 static void print_multibootinfo(struct multiboot_info *info) {
     console_printf("Multiboot Info:\n");
@@ -36,11 +37,28 @@ static void print_multibootinfo(struct multiboot_info *info) {
     }
 }
 
+static void init_mm(struct multiboot_info *info) {
+    for (struct multiboot_mmap_entry *mmap = (struct multiboot_mmap_entry *) info->mmap_addr;
+              (uint32_t) mmap < info->mmap_addr + info->mmap_length;
+              mmap = (struct multiboot_mmap_entry *) ((uint32_t) mmap + mmap->size + sizeof (mmap->size))) {
+        // No support for RAM > 4GB yet
+        if (mmap->addr > 0xffffffff || mmap->addr + mmap->len > 0xffffffff) {
+            return;
+        }
+        uint32_t addr = mmap->addr & 0xffffffff;
+        uint32_t len = mmap->len & 0xffffffff;
+        if (addr >= 0x100000 && mmap->type == MULTIBOOT_MEMORY_AVAILABLE) {
+            kmalloc_init((void *) addr, len);
+        }
+    }
+}
+
 void kernel_main(uint32_t multiboot_magic, struct multiboot_info *multiboot_info) {
 	console_init();
     console_setcolor(VGA_COLOR_LIGHT_BLUE);
     console_printf("Welcome to Discovery OS\n");
     print_multibootinfo(multiboot_info);
+    init_mm(multiboot_info);
 
     if (multiboot_magic != MULTIBOOT_BOOTLOADER_MAGIC) {
         console_printf("Invalid magic number: 0x%x\n", (unsigned) multiboot_magic);
