@@ -35,3 +35,8 @@ is reserved for the kernel
 * [GNU Linker documentation](https://sourceware.org/binutils/docs-2.33.1/ld/index.html)
 * [GNU Compiler inline assembly](https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html)
   * [Machine specific constraints](https://gcc.gnu.org/onlinedocs/gcc/Machine-Constraints.html#Machine-Constraints)
+* Keyboard
+  * [PS/2 Keyboard - OSDev](https://wiki.osdev.org/PS/2_Keyboard)
+  * [Operating Systems Development - Keyboard](http://www.brokenthorn.com/Resources/OSDev19.html)
+  * [8042 PS/2 Controller - OSDev](https://wiki.osdev.org/%228042%22_PS/2_Controller)
+  * [8042 - Keyboard Controller (AT,PS/2)](https://stanislavs.org/helppc/8042.html)

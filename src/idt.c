@@ -75,5 +75,5 @@ void idt_init(void) {
     idt_set_descriptor(31, &exception_handler_isr31, IDT_TRAP_GATE);
 
     __asm__ __volatile__ ("lidt %0" : : "m"(idtr));
-    __asm__ __volatile__ ("sti"); // Set interrupt flag (enable non-maskable interrupts)
+    //__asm__ __volatile__ ("sti"); // Set interrupt flag (enable non-maskable interrupts)
 }

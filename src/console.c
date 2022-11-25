@@ -132,6 +132,10 @@ void console_printf(const char *format, ...) {
         } else {
             i++;
             switch (format[i]) {
+                case 'c':
+                    // char is promoted to int when passed via var args
+                    console_putchar(va_arg(argp, int));
+                    break;
                 case 'd':
                     console_putuint32(va_arg(argp, uint32_t), 10);
                     break;
