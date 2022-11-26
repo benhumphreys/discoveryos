@@ -4,13 +4,26 @@
 #include "kbd.h"
 
 #include "io.h"
-#include "console.h"
 
-#define NKEYS 83
-#define KBD_DATA_PORT 0x60
-#define KBD_STATUS_PORT 0x64
+#define NKEYS                   83
+#define KEY_RELEASE_MASK        0x80
+#define SCAN_CODE_MASK          0x7f
 
-char scan_code[NKEYS + 1] = {
+// IO Ports
+#define KBD_OUTPUT_BUFFER_PORT  0x60
+#define KBD_INPUT_BUFFER_PORT   0x60
+#define KBD_STATUS_REG_PORT     0x64
+#define KBD_CONTROL_REG_PORT    0x64
+
+// Scan codes
+#define SCAN_CODE_LEFT_SHIFT    42
+#define SCAN_CODE_RIGHT_SHIFT   54
+
+static int left_shift_depressed = 0;
+static int right_shift_depressed = 0;
+
+// Map scan code to ASCII character
+char to_ascii[NKEYS + 1] = {
     0,      // Not used
     27,     // ESC
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
@@ -59,20 +72,46 @@ char scan_code[NKEYS + 1] = {
     0       // Delete  
 };
 
+static void handle_shift(uint8_t code, uint8_t release) {
+    if (code == SCAN_CODE_LEFT_SHIFT) {
+        left_shift_depressed = release ? 0 : 1;
+    }
+    if (code == SCAN_CODE_RIGHT_SHIFT) {
+        right_shift_depressed = release ? 0 : 1;
+    }
+}
+
+static char toupper(char ch) {
+    if (ch < 'a' || ch > 'z') {
+        return ch;
+    }
+    return ch - ('a' - 'A');
+}
+
 char kbd_poll(void) {
-    uint8_t status = 0;
-    do {
-        status = inb(KBD_STATUS_PORT);
-        if (status & 0x80) {
-            // Key release
+    while (1) {
+        uint8_t status = 0;
+        do {
+            status = inb(KBD_STATUS_REG_PORT);
+        } while ((status & 1) == 0);
+
+        uint8_t output = inb(KBD_OUTPUT_BUFFER_PORT);
+        uint8_t release = output & KEY_RELEASE_MASK;
+        uint8_t code = output & SCAN_CODE_MASK;
+
+        if (code == SCAN_CODE_LEFT_SHIFT || code == SCAN_CODE_RIGHT_SHIFT) {
+          handle_shift(code, release);
+        }
+
+        if (release) {
             continue;
         }
-    } while ((status & 1) == 0);
-
-    uint8_t code = inb(KBD_DATA_PORT);
-    if (code > 0 && code <= NKEYS) {
-        return scan_code[code];
-    } else {
-        return 0;
+        if (code > 0 && code <= NKEYS && to_ascii[code] > 0) {
+            if (left_shift_depressed || right_shift_depressed) {
+                return toupper(to_ascii[code]);
+            } else {
+                return to_ascii[code];
+            }
+        }
     }
 }
