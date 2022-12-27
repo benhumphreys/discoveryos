@@ -4,7 +4,7 @@
 #include "types.h"
 
 /* Initialize the PIC */
-void pic_init();
+void pic_init(void);
 
 /* Send end-of-interrupt */
 void pic_send_eoi(uint8_t irq);

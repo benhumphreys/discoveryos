@@ -6,6 +6,7 @@
 #include "kmalloc.h"
 #include "kbd.h"
 #include "pic.h"
+#include "pit.h"
 
 static void print_multibootinfo(struct multiboot_info *info) {
 	console_printf("Multiboot Info:\n");
@@ -69,6 +70,7 @@ void kernel_main(uint32_t multiboot_magic, struct multiboot_info *multiboot_info
 	gdt_init();
 	idt_init();
 	pic_init();
+	pit_init();
 
 	struct cpuid cpuid = get_cpuid();
 	console_printf("CPU - Stepping: 0x%x Model: 0x%x Family: 0x%x\n", cpuid.stepping, cpuid.model, cpuid.family);

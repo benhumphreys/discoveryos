@@ -64,7 +64,7 @@ static void pic_remap(uint8_t offset1, uint8_t offset2) {
 	outb(PIC2_DATA, b);
 }
 
-void pic_init() {
+void pic_init(void) {
 	pic_remap(0x20, 0x28);
 }
 
