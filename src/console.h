@@ -21,11 +21,11 @@ enum vga_color {
 	VGA_COLOR_LIGHT_BROWN = 14,
 	VGA_COLOR_WHITE = 15,
 };
- 
+
 void console_init(void);
- 
+
 void console_setcolor(uint8_t color);
- 
+
 void console_printf(const char *format, ...);
 
 #endif
