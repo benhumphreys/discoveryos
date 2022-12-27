@@ -40,3 +40,5 @@ is reserved for the kernel
   * [Operating Systems Development - Keyboard](http://www.brokenthorn.com/Resources/OSDev19.html)
   * [8042 PS/2 Controller - OSDev](https://wiki.osdev.org/%228042%22_PS/2_Controller)
   * [8042 - Keyboard Controller (AT,PS/2)](https://stanislavs.org/helppc/8042.html)
+* 8259A PIC
+  * [8259A Programmable Interrupt Controller](https://pdos.csail.mit.edu/6.828/2017/readings/hardware/8259A.pdf)

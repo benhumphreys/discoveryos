@@ -13,3 +13,9 @@ uint8_t inb(uint16_t port) {
             : "dN" (port));
     return data;
 }
+
+void io_wait() {
+    // Port 0x80 is used for BIOS POST codes; writing to it after boot should
+    // not cause any problem
+    outb(0x80, 0);
+}

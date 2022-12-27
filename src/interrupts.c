@@ -1,5 +1,7 @@
 #include "interrupts.h"
+
 #include "console.h"
+#include "pic.h"
 
 static void halt() {
     asm volatile("cli");
@@ -195,5 +197,101 @@ void exception_handler_isr30(struct interrupt_frame *frame __attribute__((unused
 __attribute__((interrupt))
 void exception_handler_isr31(struct interrupt_frame *frame __attribute__((unused))) {
     console_printf("Unhandled exception (31)");
+    halt();
+}
+
+
+__attribute__((interrupt))
+void irq0_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    //console_printf("IRQ0 handler\n");
+    pic_send_eoi(0);
+}
+
+__attribute__((interrupt))
+void irq1_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ1 handler\n");
+    pic_send_eoi(1);
+}
+
+__attribute__((interrupt))
+void irq2_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ2 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq3_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ3 handler");
+    halt();
+}
+__attribute__((interrupt))
+void irq4_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ4 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq5_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ5 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq6_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ6 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq7_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ7 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq8_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ8 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq9_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ9 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq10_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ10 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq11_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ11 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq12_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ12 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq13_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ13 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq14_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ14 handler");
+    halt();
+}
+
+__attribute__((interrupt))
+void irq15_handler(struct interrupt_frame *frame __attribute__((unused))) {
+    console_printf("IRQ15 handler");
     halt();
 }

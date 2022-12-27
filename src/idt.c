@@ -74,6 +74,26 @@ void idt_init(void) {
     idt_set_descriptor(30, &exception_handler_isr30, IDT_TRAP_GATE);
     idt_set_descriptor(31, &exception_handler_isr31, IDT_TRAP_GATE);
 
+    // Master PIC IRQs
+    idt_set_descriptor(32, &irq0_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(33, &irq1_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(34, &irq2_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(35, &irq3_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(36, &irq4_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(37, &irq5_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(38, &irq6_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(39, &irq7_handler, IDT_INTERRUPT_GATE);
+
+    // Slave PIC IRQs
+    idt_set_descriptor(40, &irq8_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(41, &irq9_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(42, &irq10_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(43, &irq11_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(44, &irq12_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(45, &irq13_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(46, &irq14_handler, IDT_INTERRUPT_GATE);
+    idt_set_descriptor(47, &irq15_handler, IDT_INTERRUPT_GATE);
+
     __asm__ __volatile__ ("lidt %0" : : "m"(idtr));
-    //__asm__ __volatile__ ("sti"); // Set interrupt flag (enable non-maskable interrupts)
+    __asm__ __volatile__ ("sti"); // Set interrupt flag (enable non-maskable interrupts)
 }
