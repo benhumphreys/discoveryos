@@ -3,23 +3,35 @@
 #include "kbd.h"
 #include "kmalloc.h"
 #include "console.h"
+#include "string.h"
 
-#define BUF_SIZE 256
+#define INITIAL_CAPACITY 32
+
+static char *grow(char *buf, size_t newsize) {
+	char *newbuf = kmalloc(newsize);
+	memmove(newbuf, buf, newsize);
+	kfree(buf);
+	return newbuf;
+}
 
 char *readline(void) {
-	char *buf = kmalloc(BUF_SIZE);
-	size_t capacity = BUF_SIZE;
+	char *buf = kmalloc(INITIAL_CAPACITY);
+	size_t capacity = INITIAL_CAPACITY;
 	size_t size = 0; // Index to next character to write
 
 	char c;
-	do {
+	while (1) {
 		c = kbd_poll();
 		if (c == '\n') {
 			break;
 		}
+		if (size == capacity - 1) {
+			capacity *= 2;
+			buf = grow(buf, capacity);
+		}
 		buf[size++] = c;
 		console_printf("%c", c);
-	} while (size < capacity - 1);
+	};
 
 	buf[size] = '\0';
 	return buf;
