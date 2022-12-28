@@ -4,9 +4,10 @@
 #include "gdt.h"
 #include "idt.h"
 #include "kmalloc.h"
-#include "kbd.h"
+#include "readline.h"
 #include "pic.h"
 #include "pit.h"
+#include "string.h"
 
 static void print_multibootinfo(struct multiboot_info *info) {
 	console_printf("Multiboot Info:\n");
@@ -75,11 +76,17 @@ void kernel_main(uint32_t multiboot_magic, struct multiboot_info *multiboot_info
 	struct cpuid cpuid = get_cpuid();
 	console_printf("CPU - Stepping: 0x%x Model: 0x%x Family: 0x%x\n", cpuid.stepping, cpuid.model, cpuid.family);
 
-	char c;
-	do {
-		c = kbd_poll();
-		console_printf("%c", c);
-	} while (c != 27);
+	char *line;
+	while (1) {
+		console_printf("> ");
+		line = readline();
+		console_printf("%c", '\n');
+		if (strcmp(line, "shutdown") == 0) {
+			kfree(line);
+			break;
+		}
+		kfree(line);
+	};
 
 	console_printf("Shutdown\n");
 	asm("int $0xe"); // Software interrupt (Page Fault)

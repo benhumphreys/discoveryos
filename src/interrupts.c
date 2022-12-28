@@ -179,12 +179,10 @@ __attribute__((interrupt)) void exception_handler_isr31(struct interrupt_frame *
 }
 
 __attribute__((interrupt)) void irq0_handler(struct interrupt_frame *frame __attribute__((unused))) {
-	// console_printf("IRQ0 handler\n");
 	pic_send_eoi(0);
 }
 
 __attribute__((interrupt)) void irq1_handler(struct interrupt_frame *frame __attribute__((unused))) {
-	console_printf("IRQ1 handler\n");
 	pic_send_eoi(1);
 }
 

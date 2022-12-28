@@ -87,6 +87,11 @@ char kbd_poll(void) {
 		uint8_t status = 0;
 		do {
 			status = inb(KBD_STATUS_REG_PORT);
+			if ((status & 1) == 0) {
+				// Will be woken by all interrupts including the 1ms timer, but
+				// is better than pure fast polling
+				asm volatile("hlt");
+			}
 		} while ((status & 1) == 0);
 
 		uint8_t output = inb(KBD_OUTPUT_BUFFER_PORT);
