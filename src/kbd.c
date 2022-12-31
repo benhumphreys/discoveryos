@@ -18,9 +18,11 @@
 // Scan codes
 #define SCAN_CODE_LEFT_SHIFT 42
 #define SCAN_CODE_RIGHT_SHIFT 54
+#define SCAN_CODE_LEFT_CTRL 29
 
 static int left_shift_depressed = 0;
 static int right_shift_depressed = 0;
+static int left_ctrl_depressed = 0;
 
 // Map scan code to ASCII character
 char to_ascii[NKEYS + 1] = {
@@ -66,6 +68,12 @@ char to_ascii[NKEYS + 1] = {
 	0 // Delete
 };
 
+static void handle_ctrl(uint8_t code, uint8_t release) {
+	if (code == SCAN_CODE_LEFT_CTRL) {
+		left_ctrl_depressed = release ? 0 : 1;
+	}
+}
+
 static void handle_shift(uint8_t code, uint8_t release) {
 	if (code == SCAN_CODE_LEFT_SHIFT) {
 		left_shift_depressed = release ? 0 : 1;
@@ -82,7 +90,14 @@ static char toupper(char ch) {
 	return ch - ('a' - 'A');
 }
 
-char kbd_poll(void) {
+static struct key_stroke build_key_stroke(char c) {
+	struct key_stroke key;
+	key.c = c;
+	key.modifiers = left_ctrl_depressed ? CTRL_MODIFIER : 0;
+	return key;
+}
+
+struct key_stroke kbd_poll(void) {
 	while (1) {
 		uint8_t status = 0;
 		do {
@@ -101,15 +116,18 @@ char kbd_poll(void) {
 		if (code == SCAN_CODE_LEFT_SHIFT || code == SCAN_CODE_RIGHT_SHIFT) {
 			handle_shift(code, release);
 		}
+		if (code == SCAN_CODE_LEFT_CTRL) {
+			handle_ctrl(code, release);
+		}
 
 		if (release) {
 			continue;
 		}
 		if (code > 0 && code <= NKEYS && to_ascii[code] > 0) {
 			if (left_shift_depressed || right_shift_depressed) {
-				return toupper(to_ascii[code]);
+				return build_key_stroke(toupper(to_ascii[code]));
 			} else {
-				return to_ascii[code];
+				return build_key_stroke(to_ascii[code]);
 			}
 		}
 	}

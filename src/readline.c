@@ -1,3 +1,10 @@
+/*
+ * Provides basic readline style functionality
+ *
+ * Shortcuts supported:
+ * - Backspace - Delete previous character
+ * - Ctrl + u - Cut text to beginning of line
+ */
 #include "readline.h"
 
 #include "kbd.h"
@@ -19,25 +26,30 @@ char *readline(void) {
 	size_t capacity = INITIAL_CAPACITY;
 	size_t size = 0; // Index to next character to write
 
-	char c;
+	struct key_stroke key_event;
 	while (1) {
-		c = kbd_poll();
-		if (c == '\n') {
+		key_event = kbd_poll();
+		if (key_event.c == '\n') {
 			break;
 		}
-        if (c == '\b') {
-            if (size > 0) {
-                console_backspace(1);
-                size--;
-            }
-            continue;
-        }
+		if (key_event.c == '\b') {
+			if (size > 0) {
+				console_backspace(1);
+				size--;
+			}
+			continue;
+		}
+		if (key_event.c == 'u' && (key_event.modifiers & CTRL_MODIFIER)) {
+			console_backspace(size);
+			size = 0;
+			continue;
+		}
 		if (size == capacity - 1) {
 			capacity *= 2;
 			buf = grow(buf, capacity);
 		}
-		buf[size++] = c;
-		console_printf("%c", c);
+		buf[size++] = key_event.c;
+		console_printf("%c", key_event.c);
 	};
 
 	buf[size] = '\0';
