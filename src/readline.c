@@ -25,6 +25,13 @@ char *readline(void) {
 		if (c == '\n') {
 			break;
 		}
+        if (c == '\b') {
+            if (size > 0) {
+                console_backspace(1);
+                size--;
+            }
+            continue;
+        }
 		if (size == capacity - 1) {
 			capacity *= 2;
 			buf = grow(buf, capacity);

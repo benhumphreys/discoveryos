@@ -28,4 +28,6 @@ void console_setcolor(uint8_t color);
 
 void console_printf(const char *format, ...);
 
+void console_backspace(size_t n);
+
 #endif

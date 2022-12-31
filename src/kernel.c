@@ -88,6 +88,5 @@ void kernel_main(uint32_t multiboot_magic, struct multiboot_info *multiboot_info
 		kfree(line);
 	};
 
-	console_printf("Shutdown\n");
-	asm("int $0xe"); // Software interrupt (Page Fault)
+	console_printf("Shutting down\n");
 }

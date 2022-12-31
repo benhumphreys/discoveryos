@@ -122,6 +122,15 @@ static void update_cursor(void) {
 	outb(CRTC_DATA_PORT, (uint8_t)((pos >> 8) & 0xFF));
 }
 
+void console_backspace(size_t n) {
+    while (n > 0 && console_column > 0) {
+        console_column--;
+		console_putcharat('\0', console_color, console_column, console_row);
+        n--;
+    }
+    update_cursor();
+}
+
 void console_printf(const char *format, ...) {
 	va_list argp;
 	va_start(argp, format);
