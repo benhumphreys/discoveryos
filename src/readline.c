@@ -11,6 +11,8 @@
 #include "kmalloc.h"
 #include "console.h"
 #include "string.h"
+#include "stddef.h"
+#include "panic.h"
 
 #define INITIAL_CAPACITY 32
 
@@ -23,6 +25,9 @@ static char *grow(char *buf, size_t newsize) {
 
 char *readline(void) {
 	char *buf = kmalloc(INITIAL_CAPACITY);
+	if (buf == 0) {
+		panic("readline(): Unable to allocate memory");
+	}
 	size_t capacity = INITIAL_CAPACITY;
 	size_t size = 0; // Index to next character to write
 
